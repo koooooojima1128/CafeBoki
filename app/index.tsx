@@ -7,7 +7,7 @@ import { ConfirmModal } from '@/components/ConfirmModal';
 import { ALL_EVENT_IDS, DAYS, FIRST_DAY } from '@/data/days';
 import { overallStats, rankForCorrect, streakDays, wrongEventIds } from '@/score';
 import { useGame } from '@/state/GameContext';
-import { colors, font, radius, space } from '@/theme';
+import { colors, font, radius, shadow, space } from '@/theme';
 
 type Tool = { label: string; href: string; hint: string };
 
@@ -55,6 +55,7 @@ export default function Home() {
       }
     >
       <View style={styles.hero}>
+        <View style={styles.heroGlow} />
         <Text style={styles.logo}>☕ カフェ簿記</Text>
         <Text style={styles.tagline}>
           簿記という言語を、{'\n'}商売を通して理解するシミュレーター
@@ -189,9 +190,37 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
-  hero: { paddingTop: space(5), paddingBottom: space(1), gap: space(2.5) },
-  logo: { fontSize: font.h1, fontWeight: '900', color: colors.text },
-  tagline: { fontSize: font.body, color: colors.textMuted, lineHeight: 23 },
+  hero: {
+    marginTop: space(2),
+    backgroundColor: colors.primary,
+    borderRadius: radius.xl,
+    paddingVertical: space(7),
+    paddingHorizontal: space(6),
+    gap: space(2.5),
+    overflow: 'hidden',
+    ...shadow.card,
+  },
+  heroGlow: {
+    position: 'absolute',
+    top: -70,
+    right: -50,
+    width: 170,
+    height: 170,
+    borderRadius: radius.pill,
+    backgroundColor: 'rgba(255,255,255,0.10)',
+  },
+  logo: {
+    fontSize: font.h0,
+    fontWeight: '900',
+    color: '#fff',
+    letterSpacing: 0.5,
+  },
+  tagline: {
+    fontSize: font.body,
+    color: 'rgba(255,255,255,0.88)',
+    lineHeight: 23,
+    fontWeight: '600',
+  },
 
   meterTop: {
     flexDirection: 'row',
@@ -217,10 +246,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: radius.md,
-    paddingVertical: space(3),
-    paddingHorizontal: space(3),
-    gap: 2,
+    borderRadius: radius.lg,
+    paddingVertical: space(3.5),
+    paddingHorizontal: space(3.5),
+    gap: 3,
+    ...shadow.sm,
   },
   toolLabel: { fontSize: font.small, fontWeight: '800', color: colors.text },
   toolHint: { fontSize: font.tiny, color: colors.textFaint },
@@ -239,6 +269,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     padding: space(4),
     gap: space(1.5),
+    ...shadow.sm,
   },
   dayCardDone: { borderColor: colors.correctBorder, backgroundColor: colors.correctBg },
   dayCardLocked: { backgroundColor: colors.surfaceAlt, opacity: 0.7 },

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { colors, font, space } from '@/theme';
+import { colors, font, radius, space } from '@/theme';
 import {
   Balances,
   buildBalanceSheet,
@@ -39,14 +39,19 @@ function Group({
   title,
   rows,
   asset,
+  accent = colors.primary,
 }: {
   title: string;
   rows: Row[];
   asset?: boolean;
+  accent?: string;
 }) {
   return (
     <View style={styles.group}>
-      <Text style={styles.groupTitle}>{title}</Text>
+      <View style={styles.groupHead}>
+        <View style={[styles.groupBar, { backgroundColor: accent }]} />
+        <Text style={[styles.groupTitle, { color: accent }]}>{title}</Text>
+      </View>
       {rows.length ? (
         rows.map((r) => (
           <View style={styles.line} key={r.id}>
@@ -71,9 +76,9 @@ export function IncomeStatementView({ b }: { b: Balances }) {
     <Card>
       <Text style={styles.title}>損益計算書（PL）</Text>
       <Text style={styles.caption}>もうけ ＝ 売上 −（仕入 ＋ 経費）</Text>
-      <Group title="収益" rows={pl.revenues} />
+      <Group title="収益" rows={pl.revenues} accent={colors.positive} />
       <View style={styles.rule} />
-      <Group title="費用" rows={pl.expenses} />
+      <Group title="費用" rows={pl.expenses} accent={colors.negative} />
       <View style={styles.ruleStrong} />
       <LineRow name="利益" amount={pl.profit} strong />
     </Card>
@@ -88,12 +93,12 @@ export function BalanceSheetView({ b }: { b: Balances }) {
     <Card>
       <Text style={styles.title}>貸借対照表（BS）</Text>
       <Text style={styles.caption}>資産 ＝ 負債 ＋ 純資産</Text>
-      <Group title="資産" rows={bs.assets} asset />
+      <Group title="資産" rows={bs.assets} asset accent={colors.positive} />
       <LineRow name="資産 合計" amount={bs.totalAssets} strong />
       <View style={styles.rule} />
-      <Group title="負債" rows={bs.liabilities} />
+      <Group title="負債" rows={bs.liabilities} accent={colors.negative} />
       <View style={styles.rule} />
-      <Group title="純資産" rows={bs.equity} />
+      <Group title="純資産" rows={bs.equity} accent={colors.debitText} />
       <LineRow
         name="負債＋純資産 合計"
         amount={bs.totalLiabilities + bs.totalEquity}
@@ -162,14 +167,12 @@ export function TrialBalanceView({ b }: { b: Balances }) {
 }
 
 const styles = StyleSheet.create({
-  title: { fontSize: font.h2, fontWeight: '800', color: colors.text },
+  title: { fontSize: font.h2, fontWeight: '900', color: colors.text },
   caption: { fontSize: font.small, color: colors.textMuted },
-  group: { gap: space(1.5), marginTop: space(1) },
-  groupTitle: {
-    fontSize: font.small,
-    fontWeight: '800',
-    color: colors.textMuted,
-  },
+  group: { gap: space(1.5), marginTop: space(1.5) },
+  groupHead: { flexDirection: 'row', alignItems: 'center', gap: space(2) },
+  groupBar: { width: 4, height: 16, borderRadius: 2 },
+  groupTitle: { fontSize: font.small, fontWeight: '900' },
   line: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -191,14 +194,14 @@ const styles = StyleSheet.create({
   },
   balanceTag: {
     marginTop: space(2),
-    paddingVertical: space(2),
+    paddingVertical: space(2.5),
     paddingHorizontal: space(3),
-    borderRadius: 10,
+    borderRadius: radius.md,
     alignItems: 'center',
   },
   balanceTagText: {
     fontSize: font.small,
-    fontWeight: '700',
+    fontWeight: '800',
     color: colors.primaryDark,
   },
 

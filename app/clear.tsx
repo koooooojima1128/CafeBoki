@@ -7,7 +7,7 @@ import { studyingUrl } from '@/config';
 import { getDay, nextDay } from '@/data/days';
 import { overallStats, rankForCorrect } from '@/score';
 import { useGame } from '@/state/GameContext';
-import { colors, font, space } from '@/theme';
+import { colors, font, radius, shadow, space } from '@/theme';
 
 /** DAY N CLEAR — score, recap, next-day handoff, スタディング導線. */
 export default function Clear() {
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     paddingBottom: space(2),
   },
   badge: { fontSize: 52 },
-  title: { fontSize: 30, fontWeight: '900', color: colors.text },
+  title: { fontSize: font.h0, fontWeight: '900', color: colors.text },
   lead: {
     fontSize: font.body,
     color: colors.textMuted,
@@ -175,10 +175,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 16,
+    borderRadius: radius.lg,
     paddingVertical: space(4),
     alignItems: 'center',
     gap: space(1),
+    ...shadow.sm,
   },
   statValue: { fontSize: font.h1, fontWeight: '900', color: colors.primary },
   statLabel: { fontSize: font.small, color: colors.textMuted },
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: colors.primarySoft,
-    borderRadius: 12,
+    borderRadius: radius.md,
     paddingVertical: space(2.5),
     paddingHorizontal: space(4),
   },

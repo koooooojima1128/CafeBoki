@@ -11,7 +11,7 @@ import {
 import { balancesThrough, dayProfit, getDay } from '@/data/days';
 import { applyEvents, formatYen } from '@/engine/ledger';
 import { useGame } from '@/state/GameContext';
-import { colors, font, space } from '@/theme';
+import { colors, font, radius, shadow, space } from '@/theme';
 
 type Tab = 'pl' | 'bs' | 'tb';
 
@@ -123,24 +123,29 @@ const styles = StyleSheet.create({
 
   profitCard: {
     backgroundColor: colors.primary,
-    borderRadius: 18,
+    borderRadius: radius.lg,
     padding: space(5),
     gap: space(1.5),
+    ...shadow.card,
   },
-  profitLabel: { fontSize: font.small, fontWeight: '800', color: '#CDE7DF' },
+  profitLabel: { fontSize: font.small, fontWeight: '800', color: '#CDECE8' },
   profitValue: { fontSize: 34, fontWeight: '900', color: '#fff' },
-  profitNote: { fontSize: font.small, color: '#D8ECE5', lineHeight: 20 },
+  profitNote: { fontSize: font.small, color: '#DBEFEC', lineHeight: 20 },
 
   tabs: { flexDirection: 'row', gap: space(2), paddingVertical: space(1) },
   tab: {
     paddingVertical: space(2.5),
-    paddingHorizontal: space(3.5),
+    paddingHorizontal: space(4),
     borderRadius: 999,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderStrong,
     backgroundColor: colors.surface,
   },
-  tabActive: { backgroundColor: colors.primarySoft, borderColor: colors.primary },
+  tabActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+    ...shadow.sm,
+  },
   tabText: { fontSize: font.tiny, fontWeight: '800', color: colors.textMuted },
-  tabTextActive: { color: colors.primaryDark },
+  tabTextActive: { color: '#fff' },
 });

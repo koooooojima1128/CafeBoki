@@ -7,7 +7,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { colors, font, radius, space } from '@/theme';
+import { colors, font, radius, shadow, space } from '@/theme';
 
 /* ------------------------------------------------------------------ Button */
 
@@ -37,6 +37,7 @@ export function Button({
       style={({ pressed }) => [
         styles.btn,
         { backgroundColor: v.bg, borderColor: v.border },
+        v.raised && !disabled ? shadow.sm : null,
         pressed && !disabled ? styles.btnPressed : null,
         disabled ? styles.btnDisabled : null,
       ]}
@@ -50,13 +51,16 @@ export function Button({
   );
 }
 
-const BTN: Record<ButtonVariant, { bg: string; fg: string; border: string }> = {
-  primary: { bg: colors.primary, fg: '#fff', border: colors.primary },
-  accent: { bg: colors.accent, fg: '#fff', border: colors.accent },
+const BTN: Record<
+  ButtonVariant,
+  { bg: string; fg: string; border: string; raised?: boolean }
+> = {
+  primary: { bg: colors.primary, fg: '#fff', border: colors.primary, raised: true },
+  accent: { bg: colors.accent, fg: '#fff', border: colors.accent, raised: true },
   secondary: {
-    bg: colors.primarySoft,
+    bg: colors.surface,
     fg: colors.primaryDark,
-    border: colors.primarySoft,
+    border: colors.borderStrong,
   },
   ghost: { bg: 'transparent', fg: colors.textMuted, border: 'transparent' },
 };
@@ -76,7 +80,7 @@ export function Card({
     <View
       style={[
         styles.card,
-        tone === 'soft' ? { backgroundColor: colors.surfaceAlt } : null,
+        tone === 'plain' ? shadow.card : styles.cardSoft,
         style,
       ]}
     >
@@ -137,32 +141,34 @@ export function SectionLabel({ children }: { children: React.ReactNode }) {
 
 const styles = StyleSheet.create({
   btn: {
-    minHeight: 52,
+    minHeight: 54,
     borderRadius: radius.md,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: space(5),
   },
-  btnPressed: { opacity: 0.85 },
+  btnPressed: { opacity: 0.9, transform: [{ scale: 0.99 }] },
   btnDisabled: { opacity: 0.4 },
-  btnLabel: { fontSize: font.h3, fontWeight: '700' },
+  btnLabel: { fontSize: font.h3, fontWeight: '800', letterSpacing: 0.2 },
 
   card: {
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
-    padding: space(4),
+    padding: space(4.5),
     gap: space(3),
+  },
+  cardSoft: {
+    backgroundColor: colors.surfaceAlt,
+    borderColor: 'transparent',
   },
 
   track: {
-    height: 10,
+    height: 12,
     borderRadius: radius.pill,
     backgroundColor: colors.surfaceAlt,
-    borderWidth: 1,
-    borderColor: colors.border,
     overflow: 'hidden',
   },
   fill: {

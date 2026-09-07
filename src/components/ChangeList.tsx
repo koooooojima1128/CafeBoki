@@ -1,24 +1,28 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { colors, font, radius, space } from '@/theme';
+import { catStyle, colors, font, radius, space } from '@/theme';
 import { signedYen } from '@/engine/ledger';
 import type { EconomicChange } from '@/engine/types';
 
-/** SCREEN 03「会社の変化」— what moved inside the company, in plain terms. */
+/** SCREEN 03「会社の変化」— what moved inside the company, as pastel cards. */
 export function ChangeList({ changes }: { changes: EconomicChange[] }) {
   return (
     <View style={styles.wrap}>
       {changes.map((c) => {
+        const cs = catStyle(c.category);
         const up = c.delta >= 0;
         return (
-          <View key={c.accountId + c.category} style={styles.row}>
-            <View style={styles.left}>
-              <Text style={styles.name}>{c.label}</Text>
-              <Text style={styles.cat}>{c.category}</Text>
-            </View>
-            <Text style={[styles.amount, up ? styles.up : styles.down]}>
+          <View
+            key={c.accountId + c.category}
+            style={[styles.card, { backgroundColor: cs.bg, borderColor: cs.border }]}
+          >
+            <Text style={styles.name}>{c.label}</Text>
+            <Text
+              style={[styles.amount, { color: up ? colors.positive : colors.negative }]}
+            >
               {signedYen(c.delta)}
             </Text>
+            <Text style={[styles.cat, { color: cs.label }]}>（{c.category}）</Text>
           </View>
         );
       })}
@@ -27,21 +31,17 @@ export function ChangeList({ changes }: { changes: EconomicChange[] }) {
 }
 
 const styles = StyleSheet.create({
-  wrap: { gap: space(2) },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: space(3.5),
+  wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: space(2.5) },
+  card: {
+    flexGrow: 1,
+    flexBasis: '44%',
+    minWidth: 130,
     borderRadius: radius.md,
     borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
+    padding: space(3.5),
+    gap: space(1),
   },
-  left: { gap: space(0.5) },
-  name: { fontSize: font.h3, fontWeight: '700', color: colors.text },
-  cat: { fontSize: font.tiny, fontWeight: '700', color: colors.textFaint },
-  amount: { fontSize: font.h3, fontWeight: '800' },
-  up: { color: colors.positive },
-  down: { color: colors.negative },
+  name: { fontSize: font.small, fontWeight: '800', color: colors.text },
+  amount: { fontSize: font.h2, fontWeight: '900' },
+  cat: { fontSize: font.tiny, fontWeight: '700' },
 });

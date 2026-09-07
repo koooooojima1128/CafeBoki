@@ -7,7 +7,7 @@ import { QuestionView, RevealView, JournalView } from '@/components/eventViews';
 import { eventsBefore, getDay } from '@/data/days';
 import { applyEvents, balanceOf, buildBalanceSheet, formatYen } from '@/engine/ledger';
 import { useGame } from '@/state/GameContext';
-import { colors, font, space } from '@/theme';
+import { colors, font, radius, shadow, space } from '@/theme';
 
 type Phase = 'question' | 'reveal' | 'journal';
 
@@ -138,9 +138,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 12,
+    borderRadius: radius.md,
     paddingVertical: space(2),
     paddingHorizontal: space(3),
+    ...shadow.sm,
   },
   statusBtnLabel: { fontSize: font.tiny, color: colors.textFaint, fontWeight: '700' },
   statusBtnValue: { fontSize: font.h3, fontWeight: '900', color: colors.primary },

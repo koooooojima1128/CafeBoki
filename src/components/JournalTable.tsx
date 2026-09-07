@@ -4,6 +4,10 @@ import { colors, font, radius, space } from '@/theme';
 import { formatYen } from '@/engine/ledger';
 import type { JournalLine } from '@/engine/types';
 
+// 借方 = teal-green, 貸方 = blue (matches the design mockups)
+const DR = { bg: colors.creditBg, border: colors.creditBorder, text: colors.creditText };
+const CR = { bg: colors.debitBg, border: colors.debitBorder, text: colors.debitText };
+
 /** SCREEN 04「簿記に翻訳すると」— the 仕訳, 借方 left / 貸方 right. */
 export function JournalTable({ lines }: { lines: JournalLine[] }) {
   const debits = lines.filter((l) => l.side === 'debit');
@@ -13,13 +17,21 @@ export function JournalTable({ lines }: { lines: JournalLine[] }) {
   return (
     <View style={styles.wrap}>
       <View style={styles.headRow}>
-        <Text style={[styles.head, styles.debitHead]}>借方（かりかた）</Text>
-        <Text style={[styles.head, styles.creditHead]}>貸方（かしかた）</Text>
+        <View style={styles.headCol}>
+          <View style={[styles.pill, { backgroundColor: DR.bg, borderColor: DR.border }]}>
+            <Text style={[styles.pillText, { color: DR.text }]}>借方（かりかた）</Text>
+          </View>
+        </View>
+        <View style={styles.headCol}>
+          <View style={[styles.pill, { backgroundColor: CR.bg, borderColor: CR.border }]}>
+            <Text style={[styles.pillText, { color: CR.text }]}>貸方（かしかた）</Text>
+          </View>
+        </View>
       </View>
       {Array.from({ length: rows }).map((_, i) => (
         <View key={i} style={styles.row}>
-          <Cell line={debits[i]} tone="debit" />
-          <Cell line={credits[i]} tone="credit" />
+          <Cell line={debits[i]} c={DR} />
+          <Cell line={credits[i]} c={CR} />
         </View>
       ))}
     </View>
@@ -28,34 +40,19 @@ export function JournalTable({ lines }: { lines: JournalLine[] }) {
 
 function Cell({
   line,
-  tone,
+  c,
 }: {
   line?: JournalLine;
-  tone: 'debit' | 'credit';
+  c: { bg: string; border: string; text: string };
 }) {
-  const isDebit = tone === 'debit';
   return (
-    <View
-      style={[
-        styles.cell,
-        {
-          backgroundColor: isDebit ? colors.debitBg : colors.creditBg,
-          borderColor: isDebit ? colors.debitBorder : colors.creditBorder,
-        },
-      ]}
-    >
+    <View style={[styles.cell, { borderColor: c.border }]}>
+      <View style={[styles.accent, { backgroundColor: c.text }]} />
       {line ? (
-        <>
-          <Text
-            style={[
-              styles.acct,
-              { color: isDebit ? colors.debitText : colors.creditText },
-            ]}
-          >
-            {line.label}
-          </Text>
+        <View style={styles.cellBody}>
+          <Text style={[styles.acct, { color: c.text }]}>{line.label}</Text>
           <Text style={styles.amt}>{formatYen(line.amount)}</Text>
-        </>
+        </View>
       ) : (
         <Text style={styles.empty}>—</Text>
       )}
@@ -65,28 +62,40 @@ function Cell({
 
 const styles = StyleSheet.create({
   wrap: { gap: space(2) },
-  headRow: { flexDirection: 'row', gap: space(2) },
-  head: {
-    flex: 1,
-    fontSize: font.small,
-    fontWeight: '800',
-    textAlign: 'center',
+  headRow: { flexDirection: 'row', gap: space(2.5) },
+  headCol: { flex: 1, alignItems: 'flex-start' },
+  pill: {
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    paddingHorizontal: space(3),
+    paddingVertical: space(1),
   },
-  debitHead: { color: colors.debitText },
-  creditHead: { color: colors.creditText },
-  row: { flexDirection: 'row', gap: space(2) },
+  pillText: { fontSize: font.tiny, fontWeight: '900' },
+
+  row: { flexDirection: 'row', gap: space(2.5) },
   cell: {
     flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
     borderRadius: radius.md,
     borderWidth: 1,
-    paddingVertical: space(3.5),
-    paddingHorizontal: space(3),
-    alignItems: 'center',
-    gap: space(1),
-    minHeight: 72,
-    justifyContent: 'center',
+    backgroundColor: colors.surface,
+    overflow: 'hidden',
+    minHeight: 74,
   },
-  acct: { fontSize: font.h3, fontWeight: '800' },
-  amt: { fontSize: font.body, fontWeight: '700', color: colors.text },
-  empty: { fontSize: font.body, color: colors.textFaint },
+  accent: { width: 4, alignSelf: 'stretch' },
+  cellBody: {
+    flex: 1,
+    paddingVertical: space(3),
+    paddingHorizontal: space(3.5),
+    gap: space(0.5),
+  },
+  acct: { fontSize: font.h3, fontWeight: '900' },
+  amt: {
+    fontSize: font.body,
+    fontWeight: '800',
+    color: colors.text,
+    fontVariant: ['tabular-nums'],
+  },
+  empty: { flex: 1, textAlign: 'center', fontSize: font.body, color: colors.textFaint },
 });
