@@ -1,0 +1,13 @@
+# build artifacts / local-only — regenerated or unused on Vercel
+node_modules
+dist
+.expo
+android
+ios
+docs
+*.log
+.DS_Store
+
+# dev-only scripts (icons are pre-generated PNGs in assets/, checked in)
+scripts/verify.ts
+scripts/gen-icons.mjs

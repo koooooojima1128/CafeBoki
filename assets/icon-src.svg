@@ -1,0 +1,30 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <!-- full-bleed background (iOS masks the corners itself) -->
+  <rect width="1024" height="1024" fill="#2E7D6B"/>
+
+  <g id="mark">
+    <!-- saucer -->
+    <ellipse cx="512" cy="778" rx="262" ry="46" fill="#20574C"/>
+    <ellipse cx="512" cy="768" rx="262" ry="46" fill="#FBF7EC"/>
+
+    <!-- handle -->
+    <path d="M700 470 a100 100 0 0 1 0 180" fill="none" stroke="#FBF7EC" stroke-width="48" stroke-linecap="round"/>
+
+    <!-- cup body (gentle taper, mug-like) -->
+    <path d="M326 378 H698 L676 668 Q670 712 620 712 H404 Q354 712 348 668 Z" fill="#FBF7EC"/>
+
+    <!-- rim + coffee -->
+    <ellipse cx="512" cy="378" rx="186" ry="40" fill="#FBF7EC"/>
+    <ellipse cx="512" cy="378" rx="150" ry="27" fill="#6F4E37"/>
+
+    <!-- T-account mark on the cup -->
+    <rect x="392" y="474" width="240" height="34" rx="14" fill="#2E7D6B"/>
+    <rect x="495" y="474" width="34" height="164" rx="14" fill="#2E7D6B"/>
+
+    <!-- steam -->
+    <g stroke="#FBF7EC" stroke-width="18" stroke-linecap="round" fill="none" opacity="0.5">
+      <path d="M456 322 q-30 -28 0 -56 q30 -28 0 -56"/>
+      <path d="M566 322 q-30 -28 0 -56 q30 -28 0 -56"/>
+    </g>
+  </g>
+</svg>

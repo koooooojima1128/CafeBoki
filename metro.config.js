@@ -1,0 +1,7 @@
+// Default Expo Metro config (kept explicit so web + native resolve identically).
+const { getDefaultConfig } = require('expo/metro-config');
+
+/** @type {import('expo/metro-config').MetroConfig} */
+const config = getDefaultConfig(__dirname);
+
+module.exports = config;

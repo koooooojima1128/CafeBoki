@@ -1,0 +1,7 @@
+# Normalise line endings — the repo builds on Linux (Vercel).
+* text=auto eol=lf
+
+*.png binary
+*.ico binary
+*.jpg binary
+*.woff2 binary
