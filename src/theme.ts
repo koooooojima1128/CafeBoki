@@ -61,6 +61,23 @@ export const font = {
   tiny: 11,
 } as const;
 
+/**
+ * Font families. Rounded gothic (M PLUS Rounded 1c) everywhere.
+ * Web pulls it from Google Fonts (see app/+html.tsx); native bundles the
+ * .ttf files (see app/_layout.tsx). `bold` maps to the ExtraBold face on
+ * native; on web the same family name resolves the weight via CSS.
+ */
+export const ff = {
+  regular: (Platform.select({
+    web: "'M PLUS Rounded 1c', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    default: 'MPLUSRounded1c',
+  }) ?? 'System') as string,
+  bold: (Platform.select({
+    web: "'M PLUS Rounded 1c', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    default: 'MPLUSRounded1cExtraBold',
+  }) ?? 'System') as string,
+};
+
 /** Soft elevation for cards / floating elements. */
 export const shadow = {
   sm: (Platform.select({

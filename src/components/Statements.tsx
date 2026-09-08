@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { colors, font, radius, space } from '@/theme';
+import { colors, ff, font, radius, space } from '@/theme';
 import {
   Balances,
   buildBalanceSheet,
@@ -167,7 +167,7 @@ export function TrialBalanceView({ b }: { b: Balances }) {
 }
 
 const styles = StyleSheet.create({
-  title: { fontSize: font.h2, fontWeight: '900', color: colors.text },
+  title: { fontSize: font.h2, fontFamily: ff.bold, fontWeight: '900', color: colors.text },
   caption: { fontSize: font.small, color: colors.textMuted },
   group: { gap: space(1.5), marginTop: space(1.5) },
   groupHead: { flexDirection: 'row', alignItems: 'center', gap: space(2) },

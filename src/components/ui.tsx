@@ -7,7 +7,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { colors, font, radius, shadow, space } from '@/theme';
+import { colors, ff, font, radius, shadow, space } from '@/theme';
 
 /* ------------------------------------------------------------------ Button */
 
@@ -150,7 +150,12 @@ const styles = StyleSheet.create({
   },
   btnPressed: { opacity: 0.9, transform: [{ scale: 0.99 }] },
   btnDisabled: { opacity: 0.4 },
-  btnLabel: { fontSize: font.h3, fontWeight: '800', letterSpacing: 0.2 },
+  btnLabel: {
+    fontSize: font.h3,
+    fontFamily: ff.bold,
+    fontWeight: '800',
+    letterSpacing: 0.2,
+  },
 
   card: {
     backgroundColor: colors.surface,
@@ -189,6 +194,7 @@ const styles = StyleSheet.create({
 
   sectionLabel: {
     fontSize: font.small,
+    fontFamily: ff.bold,
     fontWeight: '700',
     color: colors.textMuted,
   },

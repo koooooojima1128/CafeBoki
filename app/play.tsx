@@ -7,7 +7,7 @@ import { QuestionView, RevealView, JournalView } from '@/components/eventViews';
 import { eventsBefore, getDay } from '@/data/days';
 import { applyEvents, balanceOf, buildBalanceSheet, formatYen } from '@/engine/ledger';
 import { useGame } from '@/state/GameContext';
-import { colors, font, radius, shadow, space } from '@/theme';
+import { colors, ff, font, radius, shadow, space } from '@/theme';
 
 type Phase = 'question' | 'reveal' | 'journal';
 
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   day: { fontSize: font.small, fontWeight: '800', color: colors.textMuted },
-  progress: { fontSize: font.h2, fontWeight: '900', color: colors.text },
+  progress: { fontSize: font.h2, fontFamily: ff.bold, fontWeight: '900', color: colors.text },
   statusBtn: {
     alignItems: 'flex-end',
     backgroundColor: colors.surface,
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     ...shadow.sm,
   },
   statusBtnLabel: { fontSize: font.tiny, color: colors.textFaint, fontWeight: '700' },
-  statusBtnValue: { fontSize: font.h3, fontWeight: '900', color: colors.primary },
+  statusBtnValue: { fontSize: font.h3, fontFamily: ff.bold, fontWeight: '900', color: colors.primary },
 
   ticks: { flexDirection: 'row', gap: 3, flexWrap: 'wrap' },
   tick: {

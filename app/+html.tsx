@@ -27,6 +27,16 @@ export default function Root({ children }: PropsWithChildren) {
         />
         <meta property="og:type" content="website" />
         <meta name="theme-color" content="#2E7D6B" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap"
+          rel="stylesheet"
+        />
         <ScrollViewStyleReset />
       </head>
       <body>{children}</body>

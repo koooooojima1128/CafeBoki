@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { colors, font, space } from '@/theme';
 import type { BusinessEvent } from '@/engine/types';
 import { formatYen } from '@/engine/ledger';
+import { shuffleOptions } from '@/engine/shuffle';
 import { Card, Divider } from './ui';
 import { ChangeList } from './ChangeList';
 import { JournalTable } from './JournalTable';
@@ -18,6 +19,10 @@ export function QuestionView({
   selected: string | null;
   onSelect: (id: string) => void;
 }) {
+  const options = React.useMemo(
+    () => shuffleOptions(event.id, event.quiz.options),
+    [event.id],
+  );
   return (
     <>
       <Card>
@@ -25,11 +30,7 @@ export function QuestionView({
         <Text style={styles.narrative}>{event.narrative}</Text>
       </Card>
       <Text style={styles.question}>{event.quiz.question}</Text>
-      <OptionList
-        options={event.quiz.options}
-        selectedId={selected}
-        onSelect={onSelect}
-      />
+      <OptionList options={options} selectedId={selected} onSelect={onSelect} />
     </>
   );
 }

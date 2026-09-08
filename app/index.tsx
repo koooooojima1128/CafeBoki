@@ -1,39 +1,29 @@
-import { useState } from 'react';
 import { router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { PhoneFrame } from '@/components/PhoneFrame';
+import { HeroImage } from '@/components/HeroImage';
 import { Button, Card, ProgressBar } from '@/components/ui';
-import { ConfirmModal } from '@/components/ConfirmModal';
 import { ALL_EVENT_IDS, DAYS, FIRST_DAY } from '@/data/days';
-import { overallStats, rankForCorrect, streakDays, wrongEventIds } from '@/score';
+import { overallStats, streakDays } from '@/score';
 import { useGame } from '@/state/GameContext';
-import { colors, font, radius, shadow, space } from '@/theme';
-
-type Tool = { label: string; href: string; hint: string };
+import { colors, ff, font, radius, shadow, space } from '@/theme';
 
 export default function Home() {
-  const { state, openDay, resetAll } = useGame();
-  const [confirmReset, setConfirmReset] = useState(false);
+  const { state, openDay } = useGame();
 
   const answered = ALL_EVENT_IDS.filter((id) => id in state.answers).length;
   const correct = ALL_EVENT_IDS.filter((id) => state.answers[id]).length;
   const pct = answered ? correct / answered : 0;
   const started = answered > 0 || state.completedDays.length > 0;
   const stats = overallStats(state.answers, state.completedDays);
-  const rank = rankForCorrect(stats.correct);
   const streak = streakDays(state.completedAt, state.lastPlayedAt);
-  const wrongCount = wrongEventIds(state.answers).length;
 
-  const tools: Tool[] = [
-    { label: 'ふりかえる', href: '/review', hint: `まちがい ${wrongCount}問` },
-    { label: '仕訳日記帳', href: '/journal-book', hint: 'つくった仕訳' },
-    { label: '勘定科目じてん', href: '/reference', hint: '借方・貸方' },
-    { label: '学んだことノート', href: '/notes', hint: 'DAYごとの要点' },
-    { label: '会社の現在地', href: '/status', hint: '累計 BS' },
-    { label: '成績表・修了証', href: '/cert', hint: '称号・シェア' },
-    { label: '進捗の引き継ぎ', href: '/transfer', hint: 'コードで移行' },
-    { label: '使い方', href: '/onboarding', hint: 'あそびかた' },
-  ];
+  const nextDay =
+    DAYS.find(
+      (d) =>
+        !state.completedDays.includes(d.day) &&
+        (d.day === FIRST_DAY || state.completedDays.includes(d.day - 1)),
+    )?.day ?? FIRST_DAY;
 
   const start = (day: number) => {
     openDay(day);
@@ -41,64 +31,48 @@ export default function Home() {
   };
 
   return (
-    <PhoneFrame
-      footer={
-        started ? (
-          <Button
-            label="はじめからやり直す"
-            variant="ghost"
-            onPress={() => setConfirmReset(true)}
-          />
-        ) : (
-          <Button label="カフェを始める" onPress={() => start(FIRST_DAY)} />
-        )
-      }
-    >
-      <View style={styles.hero}>
-        <View style={styles.heroGlow} />
-        <Text style={styles.logo}>☕ カフェ簿記</Text>
-        <Text style={styles.tagline}>
-          簿記という言語を、{'\n'}商売を通して理解するシミュレーター
-        </Text>
+    <PhoneFrame tab="home">
+      <HeroImage
+        title="カフェ簿記"
+        tagline={'簿記という言語を、\n商売を通して理解するシミュレーター'}
+      />
+
+      <View style={styles.ctaWrap}>
+        <Button
+          label={started ? `DAY ${nextDay} をつづける` : 'カフェを始める'}
+          onPress={() => start(started ? nextDay : FIRST_DAY)}
+        />
       </View>
 
       <Card>
         <View style={styles.meterTop}>
-          <Text style={styles.meterLabel}>あなたの正答率</Text>
-          {started ? (
-            <Pressable onPress={() => router.push('/cert')} hitSlop={8}>
-              <Text style={styles.rankBadge}>称号：{rank.name} ▸</Text>
-            </Pressable>
-          ) : null}
+          <Text style={styles.meterLabel}>あなたの簿記理解度</Text>
+          <Text style={styles.meterPct}>{Math.round(pct * 100)}%</Text>
         </View>
         <ProgressBar value={pct} />
-        <View style={styles.meterRow}>
-          <Text style={styles.meterPct}>{Math.round(pct * 100)}%</Text>
-          <Text style={styles.meterSub}>
-            {started
-              ? `スコア ${stats.score}点 ・ ${state.completedDays.length}/${DAYS.length} DAY`
-              : 'まだ始めていません'}
-          </Text>
-        </View>
+        <Text style={styles.meterSub}>
+          {started
+            ? `スコア ${stats.score}点 ・ ${state.completedDays.length}/${DAYS.length} DAY クリア`
+            : 'まだ始めていません'}
+        </Text>
         {streak > 0 ? (
           <Text style={styles.streak}>🔥 {streak}日連続で学習中</Text>
         ) : null}
       </Card>
 
-      {started ? (
-        <View style={styles.toolGrid}>
-          {tools.map((t) => (
-            <Pressable
-              key={t.href}
-              style={({ pressed }) => [styles.tool, pressed && { opacity: 0.85 }]}
-              onPress={() => router.push(t.href as never)}
-            >
-              <Text style={styles.toolLabel}>{t.label}</Text>
-              <Text style={styles.toolHint}>{t.hint}</Text>
-            </Pressable>
-          ))}
+      <Pressable
+        style={({ pressed }) => [styles.introCard, pressed && { opacity: 0.85 }]}
+        onPress={() => router.push('/onboarding')}
+      >
+        <Text style={styles.introEmoji}>🧭</Text>
+        <View style={styles.introBody}>
+          <Text style={styles.introTitle}>はじめての方へ</Text>
+          <Text style={styles.introSub}>
+            このアプリの使い方を簡単にご説明します
+          </Text>
         </View>
-      ) : null}
+        <Text style={styles.introChev}>›</Text>
+      </Pressable>
 
       <Text style={styles.sectionLabel}>DAY をえらぶ</Text>
       <View style={{ gap: space(2.5) }}>
@@ -158,69 +132,12 @@ export default function Home() {
           );
         })}
       </View>
-
-      <View style={styles.footerLinks}>
-        <Pressable onPress={() => router.push('/onboarding')} hitSlop={6}>
-          <Text style={styles.footerLink}>使い方</Text>
-        </Pressable>
-        <Text style={styles.footerDot}>・</Text>
-        <Pressable onPress={() => router.push('/privacy')} hitSlop={6}>
-          <Text style={styles.footerLink}>プライバシーポリシー</Text>
-        </Pressable>
-        <Text style={styles.footerDot}>・</Text>
-        <Pressable onPress={() => router.push('/terms')} hitSlop={6}>
-          <Text style={styles.footerLink}>利用規約</Text>
-        </Pressable>
-      </View>
-
-      <ConfirmModal
-        visible={confirmReset}
-        title="最初からやり直しますか？"
-        body="これまでの進捗・正答・称号がすべて消えます。元に戻せません。（引き継ぎコードは「進捗の引き継ぎ」で控えられます）"
-        confirmLabel="やり直す"
-        destructive
-        onConfirm={() => {
-          setConfirmReset(false);
-          resetAll();
-        }}
-        onCancel={() => setConfirmReset(false)}
-      />
     </PhoneFrame>
   );
 }
 
 const styles = StyleSheet.create({
-  hero: {
-    marginTop: space(2),
-    backgroundColor: colors.primary,
-    borderRadius: radius.xl,
-    paddingVertical: space(7),
-    paddingHorizontal: space(6),
-    gap: space(2.5),
-    overflow: 'hidden',
-    ...shadow.card,
-  },
-  heroGlow: {
-    position: 'absolute',
-    top: -70,
-    right: -50,
-    width: 170,
-    height: 170,
-    borderRadius: radius.pill,
-    backgroundColor: 'rgba(255,255,255,0.10)',
-  },
-  logo: {
-    fontSize: font.h0,
-    fontWeight: '900',
-    color: '#fff',
-    letterSpacing: 0.5,
-  },
-  tagline: {
-    fontSize: font.body,
-    color: 'rgba(255,255,255,0.88)',
-    lineHeight: 23,
-    fontWeight: '600',
-  },
+  ctaWrap: { marginTop: -space(7), paddingHorizontal: space(2) },
 
   meterTop: {
     flexDirection: 'row',
@@ -228,32 +145,26 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   meterLabel: { fontSize: font.small, fontWeight: '700', color: colors.textMuted },
-  rankBadge: { fontSize: font.small, fontWeight: '800', color: colors.primary },
-  meterRow: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    justifyContent: 'space-between',
-  },
-  meterPct: { fontSize: font.h2, fontWeight: '900', color: colors.primary },
+  meterPct: { fontSize: font.h2, fontFamily: ff.bold, fontWeight: '900', color: colors.primary },
   meterSub: { fontSize: font.small, color: colors.textFaint },
   streak: { fontSize: font.small, fontWeight: '800', color: colors.accentDark },
 
-  toolGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: space(2) },
-  tool: {
-    flexGrow: 1,
-    flexBasis: '30%',
-    minWidth: 100,
+  introCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space(3),
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: radius.lg,
-    paddingVertical: space(3.5),
-    paddingHorizontal: space(3.5),
-    gap: 3,
+    padding: space(4),
     ...shadow.sm,
   },
-  toolLabel: { fontSize: font.small, fontWeight: '800', color: colors.text },
-  toolHint: { fontSize: font.tiny, color: colors.textFaint },
+  introEmoji: { fontSize: 26 },
+  introBody: { flex: 1, gap: 2 },
+  introTitle: { fontSize: font.h3, fontFamily: ff.bold, fontWeight: '800', color: colors.text },
+  introSub: { fontSize: font.small, color: colors.textMuted },
+  introChev: { fontSize: font.h1, color: colors.textFaint, fontWeight: '300' },
 
   sectionLabel: {
     fontSize: font.small,
@@ -282,12 +193,13 @@ const styles = StyleSheet.create({
   },
   dayNo: {
     fontSize: font.small,
+    fontFamily: ff.bold,
     fontWeight: '900',
     color: colors.primary,
     letterSpacing: 1,
   },
   dayStatus: { fontSize: font.tiny, fontWeight: '700', color: colors.textMuted },
-  dayTitle: { fontSize: font.h3, fontWeight: '800', color: colors.text },
+  dayTitle: { fontSize: font.h3, fontFamily: ff.bold, fontWeight: '800', color: colors.text },
   daySub: { fontSize: font.small, color: colors.textMuted, lineHeight: 19 },
   mutedText: { color: colors.textFaint },
 
@@ -301,18 +213,4 @@ const styles = StyleSheet.create({
     paddingVertical: space(1),
   },
   chipText: { fontSize: font.tiny, fontWeight: '700', color: colors.textMuted },
-
-  link: { paddingVertical: space(3), alignItems: 'center' },
-  linkText: { fontSize: font.small, fontWeight: '700', color: colors.primary },
-
-  footerLinks: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: space(1),
-    paddingVertical: space(4),
-  },
-  footerLink: { fontSize: font.tiny, fontWeight: '700', color: colors.textMuted },
-  footerDot: { fontSize: font.tiny, color: colors.textFaint },
 });

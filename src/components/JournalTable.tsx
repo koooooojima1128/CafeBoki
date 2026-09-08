@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { colors, font, radius, space } from '@/theme';
+import { colors, ff, font, radius, space } from '@/theme';
 import { formatYen } from '@/engine/ledger';
 import type { JournalLine } from '@/engine/types';
 
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: space(3.5),
     gap: space(0.5),
   },
-  acct: { fontSize: font.h3, fontWeight: '900' },
+  acct: { fontSize: font.h3, fontFamily: ff.bold, fontWeight: '900' },
   amt: {
     fontSize: font.body,
     fontWeight: '800',

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { TabBar, type TabKey } from './TabBar';
 import { colors, PHONE_MAX_WIDTH, radius, space } from '@/theme';
 
 interface Props {
@@ -8,20 +9,25 @@ interface Props {
   /** Sticky footer area (usually the primary CTA). */
   footer?: React.ReactNode;
   scroll?: boolean;
+  /** When set, shows the bottom tab navigation with this tab active. */
+  tab?: TabKey;
 }
 
 /**
  * Centered phone-width column. On web it gets a soft card frame so the
  * mobile-first layout reads correctly on a desktop browser.
  */
-export function PhoneFrame({ children, footer, scroll = true }: Props) {
+export function PhoneFrame({ children, footer, scroll = true, tab }: Props) {
   return (
     <View style={styles.outer}>
       <SafeAreaView style={styles.frame} edges={['top', 'bottom']}>
         {scroll ? (
           <ScrollView
             style={styles.body}
-            contentContainerStyle={styles.bodyContent}
+            contentContainerStyle={[
+              styles.bodyContent,
+              tab ? styles.bodyContentTabbed : null,
+            ]}
             keyboardShouldPersistTaps="handled"
           >
             {children}
@@ -30,6 +36,7 @@ export function PhoneFrame({ children, footer, scroll = true }: Props) {
           <View style={[styles.body, styles.bodyContent]}>{children}</View>
         )}
         {footer ? <View style={styles.footer}>{footer}</View> : null}
+        {tab ? <TabBar active={tab} /> : null}
       </SafeAreaView>
     </View>
   );
@@ -65,6 +72,9 @@ const styles = StyleSheet.create({
     padding: space(5),
     paddingBottom: space(8),
     gap: space(4),
+  },
+  bodyContentTabbed: {
+    paddingBottom: space(12),
   },
   footer: {
     padding: space(4),

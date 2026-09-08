@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { catStyle, colors, font, radius, space } from '@/theme';
+import { catStyle, colors, ff, font, radius, space } from '@/theme';
 import { signedYen } from '@/engine/ledger';
 import type { EconomicChange } from '@/engine/types';
 
@@ -42,6 +42,6 @@ const styles = StyleSheet.create({
     gap: space(1),
   },
   name: { fontSize: font.small, fontWeight: '800', color: colors.text },
-  amount: { fontSize: font.h2, fontWeight: '900' },
+  amount: { fontSize: font.h2, fontFamily: ff.bold, fontWeight: '900' },
   cat: { fontSize: font.tiny, fontWeight: '700' },
 });

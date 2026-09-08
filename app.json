@@ -28,7 +28,15 @@
     "plugins": [
       "expo-router",
       "expo-asset",
-      "expo-font",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/MPLUSRounded1c-Regular.ttf",
+            "./assets/fonts/MPLUSRounded1c-ExtraBold.ttf"
+          ]
+        }
+      ],
       [
         "expo-splash-screen",
         {

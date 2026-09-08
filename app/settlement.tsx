@@ -11,7 +11,7 @@ import {
 import { balancesThrough, dayProfit, getDay } from '@/data/days';
 import { applyEvents, formatYen } from '@/engine/ledger';
 import { useGame } from '@/state/GameContext';
-import { colors, font, radius, shadow, space } from '@/theme';
+import { colors, ff, font, radius, shadow, space } from '@/theme';
 
 type Tab = 'pl' | 'bs' | 'tb';
 
@@ -118,7 +118,7 @@ function Tab({
 
 const styles = StyleSheet.create({
   head: { gap: space(2), paddingTop: space(2) },
-  title: { fontSize: font.h1, fontWeight: '900', color: colors.text },
+  title: { fontSize: font.h1, fontFamily: ff.bold, fontWeight: '900', color: colors.text },
   sub: { fontSize: font.body, color: colors.textMuted, lineHeight: 23 },
 
   profitCard: {
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     ...shadow.card,
   },
   profitLabel: { fontSize: font.small, fontWeight: '800', color: '#CDECE8' },
-  profitValue: { fontSize: 34, fontWeight: '900', color: '#fff' },
+  profitValue: { fontSize: 34, fontFamily: ff.bold, fontWeight: '900', color: '#fff' },
   profitNote: { fontSize: font.small, color: '#DBEFEC', lineHeight: 20 },
 
   tabs: { flexDirection: 'row', gap: space(2), paddingVertical: space(1) },
@@ -146,6 +146,11 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     ...shadow.sm,
   },
-  tabText: { fontSize: font.tiny, fontWeight: '800', color: colors.textMuted },
+  tabText: {
+    fontSize: font.tiny,
+    fontFamily: ff.bold,
+    fontWeight: '800',
+    color: colors.textMuted,
+  },
   tabTextActive: { color: '#fff' },
 });
